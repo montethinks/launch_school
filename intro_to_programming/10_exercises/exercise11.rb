@@ -1,0 +1,1 @@
+I prefer looking at the core Ruby docs because it has all of the methods and explanations that I need right now. I'm not using Rails right now. 
