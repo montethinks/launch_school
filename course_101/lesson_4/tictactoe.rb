@@ -1,6 +1,8 @@
+require 'pry'
+
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
-                [[1, 5, 9], [3, 5, 7]]              # diagonals
+                [[1, 5, 9], [3, 5, 7]].freeze              # diagonals
 
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
@@ -83,20 +85,20 @@ def detect_winner(brd)
   nil
 end
 
-def overall_winner(games)
+def winner(games)
   games.keys.select { |player| games[player] == 5}
 end
 
 # def count_games(brd)
 #   if detect_winner(brd) == 'Player'
-#     game_count[:player] += 1
+#     score[:player] += 1
 #   else
-#     game_count[:computer] += 1
+#     score[:computer] += 1
 #   end
 # end
 
 
-game_count = {player: 0, computer: 0}
+score = {player: 0, computer: 0}
 
 loop do
   board = initialize_board
@@ -122,18 +124,26 @@ loop do
   puts ""
 
   if detect_winner(board) == 'Player'
-    game_count[:player] += 1
+    score[:player] += 1
   elsif detect_winner(board) == 'Computer'
-    game_count[:computer] += 1
+    score[:computer] += 1
   else
   end
   
-  prompt "Score:  Player - #{game_count[:player]}    Computer - #{game_count[:computer]}"
-     
-  break if !overall_winner(game_count).empty?
-    
+  prompt "Score:  Player - #{score[:player]}    Computer - #{score[:computer]}"
+  
+  game_counter = 0
 
-  prompt "Play again? (y or n)"
+  if winner(score).empty?
+    game_counter += 1
+  else
+    prompt "Game over. #{detect_winner(board)} won!"
+    break
+  end
+  
+  # break if !overall_winner(score).empty?    
+
+  prompt "Keep playing? (y or n)"
   answer = gets.chomp.downcase
   break unless answer.downcase.start_with?('y')
 end
