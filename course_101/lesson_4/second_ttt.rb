@@ -15,7 +15,19 @@ end
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
   system 'clear'
-  puts "You're an #{PLAYER_MARKER}. Computer is an #{COMPUTER_MARKER}."
+  puts "                   You're an #{PLAYER_MARKER}. Computer is an #{COMPUTER_MARKER}."
+  puts "KEY"
+  puts "     |   |" 
+  puts "   1 | 2 | 3"
+  puts "     |   |"
+  puts " ----+---+----"
+  puts "     |   |"
+  puts "   4 | 5 | 6"
+  puts "     |   |"
+  puts " ----+---+----"
+  puts "     |   |"
+  puts "   7 | 8 | 9"
+  puts "     |   |"
   puts ""
   puts "     |     |"
   puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
@@ -32,6 +44,19 @@ def display_board(brd)
 end
 # rubocop:enable Metrics/AbcSize
 
+def display_key
+  puts "     |   |" 
+  puts "   1 | 2 | 3"
+  puts "     |   |"
+  puts " ----+---+----"
+  puts "     |   |"
+  puts "   4 | 5 | 6"
+  puts "     |   |"
+  puts " ----+---+----"
+  puts "     |   |"
+  puts "   7 | 8 | 9"
+  puts "     |   |"
+end
 
 def initialize_board
   new_board = {}
@@ -55,34 +80,37 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
-def find_at_risk_square(line, brd)
-  if brd.values_at(*line).count('X') == 2
-    brd.select { |key, value| line.include?(key) && value == ' ' }.keys.first
+def find_at_risk_square(line, brd, marker)
+  if brd.values_at(*line).count(marker) == 2
+    brd.select { |key, value| line.include?(key) && value == INITIAL_MARKER }.keys.first
   else
     nil
   end
 end
 
-def find_computer_winning_square(line, brd) # add the marker as an additional argument. 
-  if brd.values_at(*line).count('O') == 2
-    brd.select { |key, value| line.include?(key) && value == ' ' }.keys.first
-  else
-    nil
-  end
-end
 
 def computer_places_piece!(brd)
+  # change to offense
   square = nil
   WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd)
+    square = find_at_risk_square(line, brd, COMPUTER_MARKER)
     break if square
   end
 
-  WINNING_LINES.each do |line|
-    square = find_computer_winning_square(line, brd)
-    break if square
+  # defense
+  if !square
+    WINNING_LINES.each do |line|
+      square = find_at_risk_square(line, brd, PLAYER_MARKER)
+      break if square
+    end
   end
 
+  # pick square #5 
+  if !square
+    brd[square] = 5
+  end
+
+  # picking a random square 
   if !square
     square = empty_squares(brd).sample
   end
