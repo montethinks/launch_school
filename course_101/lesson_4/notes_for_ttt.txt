@@ -1,0 +1,28 @@
+[1] pry(main)> board
+=> {1=>"O", 2=>"X", 3=>"X", 4=>"O", 5=>"X", 6=>"X", 7=>"X", 8=>"O", 9=>"O"}
+[2] pry(main)> WINNING_LINES
+=> [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+[3] pry(main)> WINNING_LINES.each do |line|
+[3] pry(main)*   board[line] == PLAYER_MARKER
+[3] pry(main)* end
+=> [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+[4] pry(main)> board.fetch(WINNING_LINES[0][0])
+=> "O"
+[5] pry(main)> board.fetch(WINNING_LINES[0][0]).include?(PLAYER_MARKER)
+=> false
+[6] pry(main)> board.select {|key, value| WINNING_LINES[0][0].include?(key)}
+NoMethodError: undefined method `include?' for 1:Fixnum
+from (pry):8:in `block (2 levels) in <main>'
+[7] pry(main)> board.select {|key, value| [1, 2, 3].include?(key)}
+=> {1=>"O", 2=>"X", 3=>"X"}
+[8] pry(main)> board.select {|key, value| [1, 2, 3].include?(key) && value == ' ' }
+=> {}
+[9] pry(main)> board = {1=>" ", 2=>"X", 3=>"X", 4=>"O", 5=>"X", 6=>"X", 7=>"X", 8=>"O", 9=>"O"}
+=> {1=>" ", 2=>"X", 3=>"X", 4=>"O", 5=>"X", 6=>"X", 7=>"X", 8=>"O", 9=>"O"}
+[10] pry(main)> board.select {|key, value| [1, 2, 3].include?(key) && value == ' ' }
+=> {1=>" "}
+[11] pry(main)> board.select {|key, value| [1, 2, 3].include?(key) && value == ' ' }.keys
+=> [1]
+[12] pry(main)> board.select {|key, value| [1, 2, 3].include?(key) && value == ' ' }.keys.first
+=> 1
+[13] pry(main)>

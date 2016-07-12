@@ -61,8 +61,26 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def find_at_risk_square(line, board)
+  if board.values_at(*line).count('X') == 2
+    board.select{|k,v| line.include?(k) && v == ' '}.keys.first
+    binding.pry
+  else
+    nil
+  end
+end
+
 def computer_places_piece!(brd)
-  square = empty_squares(brd).sample
+  square = nil
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, brd)
+    break if square
+  end
+
+  if !square
+    square = empty_squares(brd).sample
+  end
+
   brd[square] = COMPUTER_MARKER
 end
 
@@ -89,6 +107,14 @@ def winner(games)
   games.keys.select { |player| games[player] == 5 }
 end
 
+def find_at_risk_square(line, board)
+  if board.values_at(*line).count('X') == 2
+    board.select{|k,v| line.include?(k) && v == ' '}.keys.first
+  else
+    nil
+  end
+end
+
 score = { player: 0, computer: 0 }
 
 loop do
@@ -99,6 +125,9 @@ loop do
 
     player_places_piece!(board)
     break if someone_won?(board) || board_full?(board)
+
+    find_at_risk_square(line, board)
+    binding.pry
 
     computer_places_piece!(board)
     break if someone_won?(board) || board_full?(board)

@@ -1,0 +1,64 @@
+> Welcome to Twenty-One!
+=> Dealer has ["S", "10"] and ?
+=> You have: ["H", "10"] and ["C", "Q"], for a total of 20.
+=> Would you like to (h)it or (s)tay?
+s
+=> You stayed at 20
+=> Dealer turn...
+=> Dealer hits!
+=> Dealer's cards are now: [["S", "10"], ["S", "4"], ["D", "10"]]
+=> Dealer total is now: 24
+=> Dealer busted! You win!
+-------------
+=> Do you want to play again? (y or n)
+n
+=> Thank you for playing Twenty-One! Good bye!
+
+1. Initialize deck
+2. Deal cards to player and dealer
+3. Player turn: hit or stay
+  - repeat until bust or "stay"
+4. If player bust, dealer wins.
+5. Dealer turn: hit or stay
+  - repeat until total >= 17
+6. If dealer bust, player wins.
+7. Compare cards and declare winner.
+8. Display ending cards
+
+
+*** Check to see if someone won or busted. 
+    Should be 2 separate methods; detecting the winner and showing if someone busted (> 21)
+
+
+
+
+
+
+
+
+
+
+
+Possible Card design: 
+def display_cards(player_hand)
+  puts "+------------+"
+  puts "| #{player_hand[0][0]}        #{player_hand[0][0]} |"
+  puts "|            |"
+  puts "|            |"
+  puts "|   #{player_hand[0][1]}     |"
+  puts "|            |"
+  puts "|            |"
+  puts "| #{player_hand[0][0]}       #{player_hand[0][0]}  |"
+  puts "+------------+"
+
+  puts "+------------+"
+  puts "| #{player_hand[1][0]}       #{player_hand[1][0]}  |"
+  puts "|            |"
+  puts "|            |"
+  puts "|   #{player_hand[1][1]}     |"
+  puts "|            |"
+  puts "|            |"
+  puts "| #{player_hand[1][0]}       #{player_hand[1][0]}  |"
+  puts "+------------+"
+ 
+end
