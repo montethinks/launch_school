@@ -1,0 +1,68 @@
+c) Can you change the game so that the computer moves first? Can you make this a setting at the top (i.e. a constant), so that you could play the game with either player or computer going first? Can you make it so that if the constant is set to "choose", then your game will prompt the user to determine who goes first? Valid options for the constant can be "player", "computer", or "choose".
+
+Improve the game loop
+
+There's a bit of redundant code in the main game loop:
+
+loop do
+  display_board(board)
+
+  player_places_piece!(board)
+  break if someone_won?(board) || board_full?(board)
+
+  computer_places_piece!(board)
+  break if someone_won?(board) || board_full?(board)
+end
+
+Notice how we have to break after each player makes a move. What if we could have a generic method that marks a square based on the player? We could do something like this:
+
+loop do
+  display_board(board)
+  place_piece!(board, current_player)
+  current_player = alternate_player(current_player)
+  break if someone_won?(board) || board_full?(board)
+end
+
+There are two new methods there: place_piece! and alternate_player. The place_piece! is a generic method that will know how to place the piece on the board depending on the current_player. That is, it will call player_places_piece! or computer_places_piece! depending on the value of current_player. The trick, then, is to keep track of a current_player, and to switch that variable's value after every turn.
+
+See if you can build those two methods and make this work.
+
+Chris Lee: it's like a configuratino for the game
+
+[11:13]  
+you don't change the config during the game, but it needs a setting to know what to do
+
+[11:14]  
+you want the game to always ask the user to go first -- easy, it's coded. But what if at some later point you want the game to ask the computer to go first? Update the code! Oh wait, you want the user to go first again later.
+
+[11:14]  
+Having 1 place where you can specify who goes first in your game makes things easier to change. That's the reason for the constant, so you can extract the configuration away from the logic.
+
+[11:15]  
+otherwise, you have to update a lot of code every time a change request comes in.
+
+
+
+Monte Williams (101) [11:18 AM]  
+Thanks! That makes more sense. It’s a better mental model for me to consider it being a setting vs something that needs to be decided for each game.
+
+Chris Lee [11:19 AM]  
+constants are usually like settings or configurations
+
+Monte Williams (101) [11:19 AM]  
+I originally set it up to have the user input set the constant to determine the current player but I’ve been coming back to it thinking that I missed something
+
+Chris Lee [11:19 AM]  
+that's why they're constant
+
+[11:19]  
+if you're changing the constant in the game, that's not right
+
+[11:19]  
+constants are constant
+
+Monte Williams (101) [11:21 AM]  
+right, thanks for the clarification / validation!
+
+[11:21]  
+Had to end my lurker status haha

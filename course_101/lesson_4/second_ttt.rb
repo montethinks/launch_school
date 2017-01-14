@@ -12,22 +12,23 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
+def welcome_message
+  puts "*************************"
+  puts "Welcome to Tic Tac Toe!"
+  puts "*************************"
+  puts ''
+  puts ''
+  puts "Who should go first? (p)layer, (c)omputer, or (r)andom"
+end
+
+def choose_player(current_player)
+
+end
+
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
-  system 'clear'
-  puts "                   You're an #{PLAYER_MARKER}. Computer is an #{COMPUTER_MARKER}."
-  puts "KEY"
-  puts "     |   |" 
-  puts "   1 | 2 | 3"
-  puts "     |   |"
-  puts " ----+---+----"
-  puts "     |   |"
-  puts "   4 | 5 | 6"
-  puts "     |   |"
-  puts " ----+---+----"
-  puts "     |   |"
-  puts "   7 | 8 | 9"
-  puts "     |   |"
+  system 'clear' || system 'cls'
+  puts "You're an #{PLAYER_MARKER}. Computer is an #{COMPUTER_MARKER}."
   puts ""
   puts "     |     |"
   puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
@@ -43,6 +44,10 @@ def display_board(brd)
   puts ""
 end
 # rubocop:enable Metrics/AbcSize
+
+def display_score(player1, player2)
+  puts "Score:  Player -- #{score[player1]}  Computer -- #{score[player2]}"
+end
 
 def display_key
   puts "     |   |" 
@@ -90,7 +95,7 @@ end
 
 
 def computer_places_piece!(brd)
-  # change to offense
+  # offense
   square = nil
   WINNING_LINES.each do |line|
     square = find_at_risk_square(line, brd, COMPUTER_MARKER)
@@ -107,7 +112,7 @@ def computer_places_piece!(brd)
 
   # pick square #5 
   if !square
-    brd[square] = 5
+    square = 5 if empty_squares(brd).include?(5)
   end
 
   # picking a random square 
@@ -150,23 +155,35 @@ def joinor(array, delimiter=', ', word='or')
   end
 end
 
-score = {player: 0, computer: 0}
-board = initialize_board
+# ---------------- #
+#     GAME         #
+# ---------------- #
+
+score = {player: 0, computer: 0, tie: 0}
+PLAYER_CHOICE = nil
+
+loop do 
+  welcome_message
+  player = gets.chomp.downcase
+  PLAYER_CHOICE = player
+  break if player != player.empty?
+end
+
+binding.pry
 
 loop do
   board = initialize_board
 
   loop do
     display_board(board)
-    p score
-    p board
+    # p score
+    # p board
     player_places_piece!(board)
     break if someone_won?(board) || board_full?(board)
 
     computer_places_piece!(board)
     break if someone_won?(board) || board_full?(board)
   end
-
 
 
   display_board(board)
@@ -181,6 +198,8 @@ loop do
     score[:player] += 1
   elsif detect_winner(board) == 'Computer'
     score[:computer] += 1
+  else
+    score[:tie] += 1
   end
 
   break if score[:player] == 5 || score[:computer] == 5
@@ -197,5 +216,4 @@ loop do
   break unless answer.downcase.start_with?('y')
 end
 
-prompt "#{detect_winner(board)} wins the game!"
 prompt "Thank you for playing Tic Tac Toe. Good bye!"
